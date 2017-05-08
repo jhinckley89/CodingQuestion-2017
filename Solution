@@ -1,0 +1,136 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+
+namespace ConsoleApplication1
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            //string label = "A1";
+            //string label = "F5";
+            //string label = "E7";
+            //string label = "A4";
+            //string label = "B6";
+            //string label = "xx";
+
+            //int[] pointA = new int[2];
+            //int[] pointB = new int[2];
+            //int[] pointC = new int[2];
+
+            int[] pointA = new int[] { 20, 0 };
+            int[] pointB = new int[] { 10, 50 };
+            int[] pointC = new int[] { 20, 10 };
+
+
+            //GetCoordinateByLabel(label);
+            GetLabelByCoordinates(pointA, pointB, pointC);
+        }
+
+        private static void GetLabelByCoordinates(int[] pointA, int[] pointB, int[] pointC)
+        {
+
+            //confirm that the points are a valid triangle
+            //diff between A & b == 10 and A&C == 10
+            if ((Math.Abs((pointA[0] - pointB[0]) + (pointA[1] - pointB[1])) == 10) &&
+                (Math.Abs((pointA[0] - pointC[0]) + (pointA[1] - pointC[1])) == 10))
+            {
+                
+                char rowVal = (char)((pointC[1] / 10) + 64);
+                int colVal = 0;
+
+                if (pointA[0] == pointB[0])
+                {
+                    //odd column
+                    colVal = (pointB[0] + pointC[0]) / 10;
+                }
+                else
+                {
+                    //even column
+                    colVal = (pointA[0] + pointC[0]) / 10;
+                }
+
+                string triLabel = rowVal.ToString() + colVal.ToString();
+            }
+            else
+            {
+                Console.WriteLine("Provided points do not make a valid triangle");
+            }
+        }
+
+        private static void GetCoordinateByLabel(string input)
+        {
+
+            Regex alphaNum = new Regex(@"([a-zA-Z]+)(\d+)");
+
+            Match retValue = alphaNum.Match(input);
+
+            string rowVal = retValue.Groups[1].Value;
+            string colVal = retValue.Groups[2].Value;
+
+            char row = '\0';
+
+            if (rowVal.Length == 1 && colVal.Length == 1)
+            {
+                row = Convert.ToChar(rowVal);
+
+                int rowV = (int)row % 32;
+                int colV = Int32.Parse(colVal);
+
+                if ((rowV >= 0 || rowV <= 6) && (colV >= 0 || colV <= 6))
+                {
+                    //need to ensure the value is within the perimeter provided by the example
+
+                    //find the first point - can calculate the rest from that
+                    //pointA[X, Y]
+                    int[] pointA = new int[2];
+                    int[] pointB = new int[2];
+                    int[] pointC = new int[2];
+
+                    pointA[0] = colV / 2 * 10;
+
+
+                    if (colV % 2 == 0)
+                    {
+                        //if the col number is, then its the top triangle for that col
+                        pointA[1] = (rowV - 1) * 10;
+
+                        pointB[0] = pointA[0] - 10;
+                        pointB[1] = pointA[1];
+
+                        pointC[0] = pointA[0];
+                        pointC[1] = pointA[1] + 10;
+                    }
+                    else
+                    {
+                        pointA[1] = rowV * 10;
+
+                        pointB[0] = pointA[0];
+                        pointB[1] = pointA[1] - 10;
+
+                        pointC[0] = pointA[0] + 10;
+                        pointC[1] = pointA[1];
+                    }
+
+                    string pointAf = "("  + string.Join(",", pointA) + ")";
+                    string pointBf = "("  + string.Join(",", pointB) + ")";
+                    string pointCf = "(" + string.Join(",", pointC) + ")";
+
+                    Console.WriteLine(pointAf + " " + pointBf + " " + pointCf);
+
+                }
+                else
+                {
+                    //not a valid value 
+                    //can display error how ever needed - console used as example.
+                }
+            }
+            //not a valid value 
+            //can display error how ever needed - console used as example.
+        }
+    }
+}
