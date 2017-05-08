@@ -1,9 +1,5 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ConsoleApplication1
 {
@@ -11,7 +7,7 @@ namespace ConsoleApplication1
     {
         static void Main(string[] args)
         {
-            //string label = "A1";
+            string label = "A1";
             //string label = "F5";
             //string label = "E7";
             //string label = "A4";
@@ -27,7 +23,7 @@ namespace ConsoleApplication1
             int[] pointC = new int[] { 20, 10 };
 
 
-            //GetCoordinateByLabel(label);
+            GetCoordinateByLabel(label);
             GetLabelByCoordinates(pointA, pointB, pointC);
         }
 
@@ -55,10 +51,12 @@ namespace ConsoleApplication1
                 }
 
                 string triLabel = rowVal.ToString() + colVal.ToString();
+                //return or display result
             }
             else
             {
-                Console.WriteLine("Provided points do not make a valid triangle");
+                //not a valid triangle.
+                //alert
             }
         }
 
@@ -120,17 +118,17 @@ namespace ConsoleApplication1
                     string pointBf = "("  + string.Join(",", pointB) + ")";
                     string pointCf = "(" + string.Join(",", pointC) + ")";
 
-                    Console.WriteLine(pointAf + " " + pointBf + " " + pointCf);
+                    //return or display points
 
                 }
                 else
                 {
                     //not a valid value 
-                    //can display error how ever needed - console used as example.
+                    //alert
                 }
             }
             //not a valid value 
-            //can display error how ever needed - console used as example.
+            //alert
         }
     }
 }
