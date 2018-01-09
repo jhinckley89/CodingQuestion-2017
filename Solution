@@ -1,134 +1,56 @@
 using System;
-using System.Text.RegularExpressions;
 
-namespace ConsoleApplication1
+namespace palindrome
 {
     class Program
     {
         static void Main(string[] args)
         {
-            string label = "A1";
-            //string label = "F5";
-            //string label = "E7";
-            //string label = "A4";
-            //string label = "B6";
-            //string label = "xx";
-
-            //int[] pointA = new int[2];
-            //int[] pointB = new int[2];
-            //int[] pointC = new int[2];
-
-            int[] pointA = new int[] { 20, 0 };
-            int[] pointB = new int[] { 10, 50 };
-            int[] pointC = new int[] { 20, 10 };
-
-
-            GetCoordinateByLabel(label);
-            GetLabelByCoordinates(pointA, pointB, pointC);
+            Console.WriteLine(isPalindrome(123));
+            Console.WriteLine(isPalindrome(121));
+            Console.WriteLine(isPalindrome(1234321));
+            Console.WriteLine(isPalindrome(0));
+            Console.WriteLine(isPalindrome(110011));
+            Console.WriteLine(isPalindrome(120011));
         }
 
-        private static void GetLabelByCoordinates(int[] pointA, int[] pointB, int[] pointC)
+        public static bool isPalindrome(int input)
         {
 
-            //confirm that the points are a valid triangle
-            //diff between A & b == 10 and A&C == 10
-            if ((Math.Abs((pointA[0] - pointB[0]) + (pointA[1] - pointB[1])) == 10) &&
-                (Math.Abs((pointA[0] - pointC[0]) + (pointA[1] - pointC[1])) == 10))
-            {
-                
-                char rowVal = (char)((pointC[1] / 10) + 64);
-                int colVal = 0;
+            string sVal = input.ToString();
 
-                if (pointA[0] == pointB[0])
-                {
-                    //odd column
-                    colVal = (pointB[0] + pointC[0]) / 10;
-                }
-                else
-                {
-                    //even column
-                    colVal = (pointA[0] + pointC[0]) / 10;
-                }
-
-                string triLabel = rowVal.ToString() + colVal.ToString();
-                //return or display result
-            }
-            else
+            if (sVal.ToString().Length <= 1)
             {
-                //not a valid triangle.
-                //alert
+                //base case
+                 return true;
             }
+
+            if (getFirst(sVal) != getLast(sVal))
+            {
+                //current first and last match
+                //get the midsection and call again
+                return false;
+            }
+
+            return isPalindrome(getMid(sVal));
+
         }
 
-        private static void GetCoordinateByLabel(string input)
+        public static char getFirst(string val)
         {
+            return val[0];
+        }
 
-            Regex alphaNum = new Regex(@"([a-zA-Z]+)(\d+)");
+        public static char getLast(string val)
+        {
+            return val[val.Length - 1];
+        }
 
-            Match retValue = alphaNum.Match(input);
-
-            string rowVal = retValue.Groups[1].Value;
-            string colVal = retValue.Groups[2].Value;
-
-            char row = '\0';
-
-            if (rowVal.Length == 1 && colVal.Length == 1)
-            {
-                row = Convert.ToChar(rowVal);
-
-                int rowV = (int)row % 32;
-                int colV = Int32.Parse(colVal);
-
-                if ((rowV >= 0 || rowV <= 6) && (colV >= 0 || colV <= 6))
-                {
-                    //need to ensure the value is within the perimeter provided by the example
-
-                    //find the first point - can calculate the rest from that
-                    //pointA[X, Y]
-                    int[] pointA = new int[2];
-                    int[] pointB = new int[2];
-                    int[] pointC = new int[2];
-
-                    pointA[0] = colV / 2 * 10;
-
-
-                    if (colV % 2 == 0)
-                    {
-                        //if the col number is, then its the top triangle for that col
-                        pointA[1] = (rowV - 1) * 10;
-
-                        pointB[0] = pointA[0] - 10;
-                        pointB[1] = pointA[1];
-
-                        pointC[0] = pointA[0];
-                        pointC[1] = pointA[1] + 10;
-                    }
-                    else
-                    {
-                        pointA[1] = rowV * 10;
-
-                        pointB[0] = pointA[0];
-                        pointB[1] = pointA[1] - 10;
-
-                        pointC[0] = pointA[0] + 10;
-                        pointC[1] = pointA[1];
-                    }
-
-                    string pointAf = "("  + string.Join(",", pointA) + ")";
-                    string pointBf = "("  + string.Join(",", pointB) + ")";
-                    string pointCf = "(" + string.Join(",", pointC) + ")";
-
-                    //return or display points
-
-                }
-                else
-                {
-                    //not a valid value 
-                    //alert
-                }
-            }
-            //not a valid value 
-            //alert
+        public static int getMid(string val)
+        {
+            return Convert.ToInt32(val.Substring(1, val.Length-2));
         }
     }
+
+
 }
